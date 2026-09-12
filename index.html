@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fa" dir="rtl">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +7,78 @@
     <link rel="stylesheet" href="styles/index.css" />
   </head>
   <body>
-    <div id="app"></div>
+    <main id="app">
+      <h1>VLESS Panel</h1>
+
+      <p class="hint">
+        Create a token: use the search box at the top of the Cloudflare
+        dashboard, search for "API Tokens", open it, then Create Token → Custom
+        token. Add only these two permissions: Account / Workers Scripts / Edit
+        and Account / Account Analytics / Read, and set Account Resources to
+        your account. Cloudflare shows the token only once — save it somewhere
+        safe before closing that page.
+      </p>
+
+      <form id="panelForm" onsubmit="return false;">
+        <label>
+          Cloudflare API Token
+          <div class="input-with-action">
+            <input type="password" id="token" autocomplete="off" />
+            <button
+              type="button"
+              id="toggleTokenButton"
+              class="secondary small"
+            >
+              Show
+            </button>
+          </div>
+        </label>
+        <p class="hint">
+          This token goes straight from your browser to Cloudflare's own
+          servers; this project has no external server of its own —
+          <code>server.js</code> is a few dozen lines you can read yourself.
+        </p>
+
+        <label>
+          Account ID
+          <input type="text" id="accountId" autocomplete="off" />
+        </label>
+        <p class="hint">
+          Find your Account ID in the dashboard sidebar under Build → Compute →
+          Workers & Pages (right-side panel). Your workers.dev subdomain is
+          already set up there too — no need to configure it.
+        </p>
+
+        <label>
+          Worker name
+          <input type="text" id="scriptName" value="my-personal-vless" />
+        </label>
+
+        <div class="actions">
+          <button type="button" id="verifyButton" class="secondary">
+            Verify token
+          </button>
+          <button type="button" id="deployButton">Deploy</button>
+          <button type="button" id="quotaButton">Today's usage</button>
+          <button type="button" id="forgetButton" class="secondary">
+            Forget saved info
+          </button>
+        </div>
+      </form>
+
+      <p class="hint warning">
+        Heads up: Cloudflare Workers can't connect back to Cloudflare's own
+        network. If your device is connected through the VLESS config below
+        while you use this panel, verify/deploy/usage requests here will fail —
+        and once connected, the Cloudflare dashboard itself won't load through
+        that same tunnel either.
+      </p>
+
+      <p id="status" data-kind="idle"></p>
+      <p id="quota" hidden></p>
+      <div id="result" hidden></div>
+    </main>
+
     <script type="module" src="dist/main.js"></script>
   </body>
 </html>
